@@ -1,0 +1,30 @@
+{
+    "name": "steffenmaechtel/exclude_tables_for_compare_database",
+    "type": "typo3-cms-extension",
+    "description": "Exclude tables for compare database",
+    "homepage": "https://github.com/steffenmaechtel/exclude_tables_for_compare_database",
+    "version": "0.0.1",
+    "license": "MIT",
+    "keywords": [
+        "TYPO3",
+        "CMS",
+        "typo3"
+    ],
+    "require": {
+        "typo3/cms-core": ">=8.7.0,<8.7.999",
+        "php": ">=7.0.0,<7.3.0"
+    },
+    
+    "autoload": {
+        "psr-4": {
+            "SteffenMaechtel\\ExcludeTablesForCompareDatabase\\": "Classes"
+        }
+    },
+    "authors": [
+        {
+            "name": "Steffen Maechtel",
+            "email": "info@steffen-maechtel.de",
+            "homepage": "http://www.steffen-maechtel.de/"
+        }
+    ]
+}

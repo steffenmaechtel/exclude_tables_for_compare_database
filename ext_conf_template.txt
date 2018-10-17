@@ -1,0 +1,2 @@
+# cat=basic/enable; type=string; label=Exclude tables: comma separated list of tables. You can use shell wildcards like *. For example: my_table, my_newsletter_tool_*
+excludeTables = 

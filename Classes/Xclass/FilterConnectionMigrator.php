@@ -19,20 +19,16 @@ class FilterConnectionMigrator extends ConnectionMigrator
     {
         $schemaDiff = parent::buildSchemaDiff($renameUnused);
 
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['excludeTables']) === false) {
-            return;
+        $excludeTables = $this->getExcludeTables();
+
+        if (count($excludeTables) === 0) {
+            return $schemaDiff;
         }
-        
-            /*$ignoreTables = [
-            'tx_*',
-            'tx_realurl_urldata',
-            '___*'
-        ];*/
 
         foreach (['newTables', 'changedTables', 'removedTables'] as $property) {
             foreach ($schemaDiff->{$property} as $tableName => $table) {
-                foreach ($ignoreTables as $ignore) {
-                    if (fnmatch($ignore, $tableName)) {
+                foreach ($excludeTables as $excludeTable) {
+                    if (fnmatch($excludeTable, $tableName)) {
                         unset($schemaDiff->{$property}[$tableName]);
                     }
                 }
@@ -40,5 +36,35 @@ class FilterConnectionMigrator extends ConnectionMigrator
         }
 
         return $schemaDiff;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getExcludeTables(): array
+    {
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']) === false) {
+            return [];
+        }
+
+        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']);
+
+        if (isset($configuration['excludeTables']) === false) {
+            return [];
+        }
+        
+        $excludeTables = [];
+        $excludeTablesRaw = explode(',', $configuration['excludeTables']);
+        
+        foreach ($excludeTablesRaw as $excludeTableRaw) {
+            $excludeTable = trim($excludeTableRaw);
+            if ($excludeTable === '') {
+                continue;
+            }
+            
+            $excludeTables[] = $excludeTable;
+        }
+        
+        return $excludeTables;
     }
 }
