@@ -5,9 +5,10 @@ namespace SteffenMaechtel\ExcludeTablesForCompareDatabase\Xclass;
 /**
  * @author Steffen Maechtel <info@steffen-maechtel.de>
  */
-
 use Doctrine\DBAL\Schema\SchemaDiff;
+use SteffenMaechtel\ExcludeTablesForCompareDatabase\Configuration;
 use TYPO3\CMS\Core\Database\Schema\ConnectionMigrator;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class FilterConnectionMigrator extends ConnectionMigrator
 {
@@ -19,7 +20,9 @@ class FilterConnectionMigrator extends ConnectionMigrator
     {
         $schemaDiff = parent::buildSchemaDiff($renameUnused);
 
-        $excludeTables = $this->getExcludeTables();
+        $configuration = GeneralUtility::makeInstance(Configuration::class);
+
+        $excludeTables = $configuration->getExcludeTables();
 
         if (count($excludeTables) === 0) {
             return $schemaDiff;
@@ -36,35 +39,5 @@ class FilterConnectionMigrator extends ConnectionMigrator
         }
 
         return $schemaDiff;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getExcludeTables(): array
-    {
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']) === false) {
-            return [];
-        }
-
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']);
-
-        if (isset($configuration['excludeTables']) === false) {
-            return [];
-        }
-        
-        $excludeTables = [];
-        $excludeTablesRaw = explode(',', $configuration['excludeTables']);
-        
-        foreach ($excludeTablesRaw as $excludeTableRaw) {
-            $excludeTable = trim($excludeTableRaw);
-            if ($excludeTable === '') {
-                continue;
-            }
-            
-            $excludeTables[] = $excludeTable;
-        }
-        
-        return $excludeTables;
     }
 }

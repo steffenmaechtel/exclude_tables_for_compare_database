@@ -1,17 +1,24 @@
 <?php
 namespace SteffenMaechtel\ExcludeTablesForCompareDatabase\Xclass;
 
+/**
+ * @author Steffen Maechtel <info@steffen-maechtel.de>
+ */
+use SteffenMaechtel\ExcludeTablesForCompareDatabase\Configuration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Install\Service\SqlSchemaMigrationService;
 
 class FilterSqlSchemaMigrationService extends SqlSchemaMigrationService
 {
+
     /**
-     * 
      * @overload
      */
-    public function getUpdateSuggestions($diffArr, $keyList = 'extra,diff') {
+    public function getUpdateSuggestions($diffArr, $keyList = 'extra,diff')
+    {
+        $configuration = GeneralUtility::makeInstance(Configuration::class);
 
-        $excludeTables = $this->getExcludeTables();
+        $excludeTables = $configuration->getExcludeTables();
 
         if (count($excludeTables) === 0) {
             return parent::getUpdateSuggestions($diffArr, $keyList);
@@ -24,37 +31,7 @@ class FilterSqlSchemaMigrationService extends SqlSchemaMigrationService
                 }
             }
         }
-        
+
         return parent::getUpdateSuggestions($diffArr, $keyList);
-    }
-    
-    /**
-     * @return array
-     */
-    protected function getExcludeTables()
-    {
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']) === false) {
-            return [];
-        }
-
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']);
-
-        if (isset($configuration['excludeTables']) === false) {
-            return [];
-        }
-        
-        $excludeTables = [];
-        $excludeTablesRaw = explode(',', $configuration['excludeTables']);
-        
-        foreach ($excludeTablesRaw as $excludeTableRaw) {
-            $excludeTable = trim($excludeTableRaw);
-            if ($excludeTable === '') {
-                continue;
-            }
-            
-            $excludeTables[] = $excludeTable;
-        }
-        
-        return $excludeTables;
     }
 }
