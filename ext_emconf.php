@@ -13,8 +13,8 @@ $EM_CONF[$_EXTKEY] = [
     'author_email' => 'info@steffen-maechtel.de',
     'constraints' => [
         'depends' => [
-            'typo3' => '8.7.0-8.7.999',
-            'php' => '7.0.0-7.2.999'
+            'typo3' => '6.2.0-8.7.999',
+            'php' => '5.5.0-7.2.999'
         ],
         'conflicts' => [],
         'suggests' => [],
