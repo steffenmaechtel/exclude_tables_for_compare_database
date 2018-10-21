@@ -12,13 +12,9 @@ class Configuration
      */
     public function getExcludeTables()
     {
-        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']) === false) {
-            return [];
-        }
+        $configuration = $this->getConfiguration();
 
-        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']);
-
-        if (isset($configuration['excludeTables']) === false) {
+        if (empty($configuration) || isset($configuration['excludeTables']) === false) {
             return [];
         }
 
@@ -35,5 +31,33 @@ class Configuration
         }
 
         return $excludeTables;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebug()
+    {
+        $configuration = $this->getConfiguration();
+
+        if ($configuration['debug']) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function getConfiguration()
+    {
+        if (isset($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']) === false) {
+            return [];
+        }
+
+        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['exclude_tables_for_compare_database']);
+
+        return $configuration;
     }
 }

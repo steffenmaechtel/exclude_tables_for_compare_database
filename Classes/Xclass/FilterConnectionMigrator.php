@@ -25,7 +25,21 @@ class FilterConnectionMigrator extends ConnectionMigrator
         $excludeTables = $configuration->getExcludeTables();
 
         if (count($excludeTables) === 0) {
+            if ($configuration->isDebug()) {
+                ob_clean();
+                echo '<div style="background: pink; border: 1px solid red; padding: 10px; margin: 10px;">';
+                echo '<h1>Debug output for extension: exclude_tables_for_compare_database</h1>';
+                echo '<p>Configuration (EMPTY! Not tables defined):</p>';
+                echo '<pre style="padding: 10px; margin: 10px;">';
+                print_r($excludeTables);
+                echo '</pre>';
+                echo '</div>';
+            }
             return $schemaDiff;
+        }
+
+        if ($configuration->isDebug()) {
+            $excludeTablesDebugInformation = [];
         }
 
         foreach (['newTables', 'changedTables', 'removedTables'] as $property) {
@@ -33,9 +47,27 @@ class FilterConnectionMigrator extends ConnectionMigrator
                 foreach ($excludeTables as $excludeTable) {
                     if (fnmatch($excludeTable, $tableName)) {
                         unset($schemaDiff->{$property}[$tableName]);
+                        if ($configuration->isDebug()) {
+                            $excludeTablesDebugInformation[$excludeTable][] = $tableName;
+                        }
                     }
                 }
             }
+        }
+
+        if ($configuration->isDebug()) {
+            ob_clean();
+            echo '<div style="background: pink; border: 1px solid red; padding: 10px; margin: 10px;">';
+            echo '<h1>Debug output for extension: exclude_tables_for_compare_database</h1>';
+            echo '<p>Configuration:</p>';
+            echo '<pre style="padding: 10px; margin: 10px;">';
+            print_r($excludeTables);
+            echo '</pre>';
+            echo '<p>Excluded tables grouped by matching filter:</p>';
+            echo '<pre style="padding: 10px; margin: 10px;">';
+            print_r($excludeTablesDebugInformation);
+            echo '</pre>';
+            echo '</div>';
         }
 
         return $schemaDiff;
