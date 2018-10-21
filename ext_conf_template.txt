@@ -1,5 +1,5 @@
 # cat=basic/enable; type=string; label=Exclude tables: comma separated list of tables. You can use shell wildcards like *. For example: my_table, my_newsletter_tool_*
 excludeTables = 
 
-# cat=basic/enable; type=boolean; label=Debug enabled: shows excluded tables in compare tool
+# cat=basic/enable; type=boolean; label=Debug enabled: shows excluded tables in compare tool. debug output currently not working for typo3 9.x
 debug =

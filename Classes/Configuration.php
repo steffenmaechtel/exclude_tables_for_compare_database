@@ -38,6 +38,13 @@ class Configuration
      */
     public function isDebug()
     {
+        /**
+         * currenty not working for typo3 9.x (ajax response)
+         */
+        if (version_compare(TYPO3_version, '9.0.0', '>=')) {
+            return false;
+        }
+
         $configuration = $this->getConfiguration();
 
         if ($configuration['debug']) {
