@@ -21,15 +21,45 @@ class FilterSqlSchemaMigrationService extends SqlSchemaMigrationService
         $excludeTables = $configuration->getExcludeTables();
 
         if (count($excludeTables) === 0) {
+            if ($configuration->isDebug()) {
+                echo '<div style="background: pink; border: 1px solid red; padding: 10px; margin: 10px;">';
+                echo '<h1>Debug output for extension: exclude_tables_for_compare_database</h1>';
+                echo '<p>Configuration (EMPTY! Not tables defined):</p>';
+                echo '<pre style="padding: 10px; margin: 10px;">';
+                print_r($excludeTables);
+                echo '</pre>';
+                echo '</div>';
+            }
             return parent::getUpdateSuggestions($diffArr, $keyList);
+        }
+
+        if ($configuration->isDebug()) {
+            $excludeTablesDebugInformation = [];
         }
 
         foreach ($diffArr['extra'] as $tableName => $table) {
             foreach ($excludeTables as $excludeTable) {
                 if (fnmatch($excludeTable, $tableName)) {
                     unset($diffArr['extra'][$tableName]);
+                    if ($configuration->isDebug()) {
+                        $excludeTablesDebugInformation[$excludeTable][] = $tableName;
+                    }
                 }
             }
+        }
+
+        if ($configuration->isDebug()) {
+            echo '<div style="background: pink; border: 1px solid red; padding: 10px; margin: 10px;">';
+            echo '<h1>Debug output for extension: exclude_tables_for_compare_database</h1>';
+            echo '<p>Configuration:</p>';
+            echo '<pre style="padding: 10px; margin: 10px;">';
+            print_r($excludeTables);
+            echo '</pre>';
+            echo '<p>Excluded tables grouped by matching filter:</p>';
+            echo '<pre style="padding: 10px; margin: 10px;">';
+            print_r($excludeTablesDebugInformation);
+            echo '</pre>';
+            echo '</div>';
         }
 
         return parent::getUpdateSuggestions($diffArr, $keyList);
