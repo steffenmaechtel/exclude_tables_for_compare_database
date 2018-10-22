@@ -3,8 +3,8 @@
     "type": "typo3-cms-extension",
     "description": "Exclude tables for compare database",
     "homepage": "https://github.com/steffenmaechtel/exclude_tables_for_compare_database",
-    "version": "0.0.7",
-    "license": "MIT",
+    "version": "0.0.8",
+    "license": "GPL-2.0-or-later",
     "keywords": [
         "TYPO3",
         "CMS",
