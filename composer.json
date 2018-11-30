@@ -1,7 +1,7 @@
 {
     "name": "steffenmaechtel/exclude_tables_for_compare_database",
     "type": "typo3-cms-extension",
-    "description": "Exclude tables for compare database",
+    "description": "TYPO3 CMS extension: Exclude tables for compare database",
     "homepage": "https://github.com/steffenmaechtel/exclude_tables_for_compare_database",
     "license": "GPL-2.0-or-later",
     "keywords": [
