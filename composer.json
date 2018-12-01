@@ -5,8 +5,7 @@
     "homepage": "https://github.com/steffenmaechtel/exclude_tables_for_compare_database",
     "license": "GPL-2.0-or-later",
     "keywords": [
-        "TYPO3",
-        "CMS",
+        "cms",
         "typo3"
     ],
     "require": {
